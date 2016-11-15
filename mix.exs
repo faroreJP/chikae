@@ -23,6 +23,7 @@ defmodule Chikae.Mixfile do
   end
 
   defp deps do
-    [{:poison, "~> 3.0"}]
+    [{:poison,  "~> 3.0"},
+     {:uuid,    "~> 1.1"}]
   end
 end

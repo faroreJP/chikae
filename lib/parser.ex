@@ -1,32 +1,23 @@
 defmodule Chikae.Parser do
-  import DateTime
-
   alias Chikae.Task
   alias Chikae.Repository
 
-  def execute("add", args) do
-    task = %Task{uuid: 0, name: hd(args), date_time: to_unix(utc_now())}
+  def parse(_,       []   ), do: %{}
+  def parse(command, args ), do: parse_all_arguments(%{}, command, hd(args), tl(args))
 
-    Repository.insert(task)
-    Chikae.log("Added Task : #{task.name}")
+  defp parse_all_arguments(opt, command, arg, []),    do: parse_argument(opt, command, arg, [])
+  defp parse_all_arguments(opt, command, arg, args),  do: parse_argument(opt, command, arg, args) |> parse_all_arguments(command, hd(args), tl(args))
+
+  use Chikae.Command.List, :parser
+  use Chikae.Command.Add,  :parser
+  use Chikae.Command.Find, :parser
+
+  defp parse_argument(_, _, arg, _) do
+    Chikae.log("Invalid Argument : #{arg}")
+    exit(:boom)
   end
 
-  def execute("list", args) do
-    tasks = Repository.get_all()
-    Enum.each( tasks, fn(x) -> Task.print(x) end )
-  end
-
-  def execute("find", args) do
-    Repository.get( String.to_integer(hd(args)) )
-    |> Task.print
-  end
-
-  def execute("remove", args) do
+  def parse("remove", args) do
     IO.puts "[chikae] Removed Task : #{args}"
   end
-
-  def execute(command, args) do
-    IO.puts "[chikae] Invalid Command : #{command}"
-  end
-
 end

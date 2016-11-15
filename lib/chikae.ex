@@ -1,22 +1,16 @@
 defmodule Chikae do
 
-  @moduledoc """
-  The TODO Management Tool
-  """
+  def main([]) do
+    Chikae.Executioner.execute(:help, nil)
+  end
 
   def main(argv) do
-    Process.flag(:trap_exit, true)
-
-    # Devide Command and Arguments
-    [ command | arguments ] = argv
-
-    Chikae.Parser.execute(command, arguments)
-
-    # args
-    # |> Enum.each( fn(x) -> IO.puts(x) end )
+    command = hd(argv) |> String.to_atom()
+    opt     = Chikae.Parser.parse(command, tl(argv))
+    Chikae.Executioner.execute(command, opt)
   end
 
   def log(str) do
-    IO.puts "[chikai]#{str}"
+    IO.puts "#{str}"
   end
 end
