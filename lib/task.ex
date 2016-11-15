@@ -1,4 +1,4 @@
-defmodule Chikai.Task do
+defmodule Chikae.Task do
   import DateTime
 
   defstruct uuid:         0, 

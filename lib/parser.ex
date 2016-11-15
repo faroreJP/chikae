@@ -1,14 +1,14 @@
-defmodule Chikai.Parser do
+defmodule Chikae.Parser do
   import DateTime
 
-  alias Chikai.Task
-  alias Chikai.Repository
+  alias Chikae.Task
+  alias Chikae.Repository
 
   def execute("add", args) do
     task = %Task{uuid: 0, name: hd(args), date_time: to_unix(utc_now())}
 
     Repository.insert(task)
-    Chikai.log("Added Task : #{task.name}")
+    Chikae.log("Added Task : #{task.name}")
   end
 
   def execute("list", args) do
@@ -22,11 +22,11 @@ defmodule Chikai.Parser do
   end
 
   def execute("remove", args) do
-    IO.puts "[chikai] Removed Task : #{args}"
+    IO.puts "[chikae] Removed Task : #{args}"
   end
 
   def execute(command, args) do
-    IO.puts "[chikai] Invalid Command : #{command}"
+    IO.puts "[chikae] Invalid Command : #{command}"
   end
 
 end

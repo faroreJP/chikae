@@ -1,4 +1,4 @@
-defmodule Chikai.Repository do
+defmodule Chikae.Repository do
 
   def get_all() do
     case File.read "tasks.bin" do
@@ -19,7 +19,7 @@ defmodule Chikai.Repository do
     json  = to_string(Poison.Encoder.encode(tasks, []))
 
     File.write "tasks.bin", json, [:write, :utf8]
-    Chikai.log("inserted task : #{json}")
+    Chikae.log("inserted task : #{json}")
 
     task
   end

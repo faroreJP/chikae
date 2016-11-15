@@ -1,4 +1,4 @@
-defmodule Chikai do
+defmodule Chikae do
 
   @moduledoc """
   The TODO Management Tool
@@ -10,7 +10,7 @@ defmodule Chikai do
     # Devide Command and Arguments
     [ command | arguments ] = argv
 
-    Chikai.Parser.execute(command, arguments)
+    Chikae.Parser.execute(command, arguments)
 
     # args
     # |> Enum.each( fn(x) -> IO.puts(x) end )

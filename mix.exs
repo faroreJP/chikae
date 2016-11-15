@@ -1,8 +1,8 @@
-defmodule Chikai.Mixfile do
+defmodule Chikae.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :chikai,
+    [app: :chikae,
      version: "0.0.1",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
@@ -19,7 +19,7 @@ defmodule Chikai.Mixfile do
   end
 
   def escript_config do
-    [ main_module: Chikai ]
+    [ main_module: Chikae ]
   end
 
   defp deps do

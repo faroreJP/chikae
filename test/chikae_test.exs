@@ -1,6 +1,6 @@
-defmodule ChikaiTest do
+defmodule ChikaeTest do
   use ExUnit.Case
-  doctest Chikai
+  doctest Chikae
 
   test "the truth" do
     assert 1 + 1 == 2
