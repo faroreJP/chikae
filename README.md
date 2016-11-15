@@ -1,20 +1,13 @@
-# Chikai
+# Chikae
+The TODO management tool on CLI by Elixir
 
-**TODO: Add description**
+# Usage
 
-## Installation
+## Add New Task
+`./chikae add`
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+## List View All Task
+`./chikae list`
 
-  1. Add chikai to your list of dependencies in `mix.exs`:
-
-        def deps do
-          [{:chikai, "~> 0.0.1"}]
-        end
-
-  2. Ensure chikai is started before your application:
-
-        def application do
-          [applications: [:chikai]]
-        end
-
+## Find View All Task
+`./chikae list`
