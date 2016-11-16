@@ -4,9 +4,8 @@ defmodule Chikae.Command.Find do
 
   defmacro __using__(:parser) do
     quote do
-      defp parse_argument(opt,  :find,  "--uuid",   args), do: Map.put(opt, :uuid,  hd(args))
-      defp parse_argument(opt,  :find,  "--state",  args), do: Map.put(opt, :state, hd(args))
-      defp parse_argument(opt,  :find,  _,          _   ), do: opt
+      defp parse_argument(opt,  :find,  "--uuid",   pid), do: Map.put(opt, :uuid,  Queue.get(pid))
+      defp parse_argument(opt,  :find,  "--state",  pid), do: Map.put(opt, :state, Queue.get(pid))
     end
   end
 

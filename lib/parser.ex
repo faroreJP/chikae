@@ -1,12 +1,24 @@
 defmodule Chikae.Parser do
   alias Chikae.Task
   alias Chikae.Repository
+  alias Chikae.Queue
 
   def parse(_,       []   ), do: %{}
-  def parse(command, args ), do: parse_all_arguments(%{}, command, hd(args), tl(args))
+  def parse(command, args ) do
+    pid = spawn(Queue, :start, [args])
 
-  defp parse_all_arguments(opt, command, arg, []),    do: parse_argument(opt, command, arg, [])
-  defp parse_all_arguments(opt, command, arg, args),  do: parse_argument(opt, command, arg, args) |> parse_all_arguments(command, hd(args), tl(args))
+    parse_all_arguments(%{}, command, pid)
+  end
+
+  defp parse_all_arguments(opt, command, pid) do
+    case Queue.get(pid) do
+      nil -> 
+        opt
+      arg ->
+        parse_argument(opt, command, arg, pid)
+        |> parse_all_arguments(command, pid)
+    end
+  end
 
   use Chikae.Command.List, :parser
   use Chikae.Command.Add,  :parser
