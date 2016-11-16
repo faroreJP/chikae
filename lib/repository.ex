@@ -1,7 +1,8 @@
 defmodule Chikae.Repository do
+  defp file_name(), do: "tasks.json"
 
   def get_all() do
-    case File.read "tasks.bin" do
+    case File.read file_name() do
       {:ok, jsons} ->
         Poison.Parser.parse!(jsons, keys: :atoms!)
       {_, _} ->
@@ -13,7 +14,7 @@ defmodule Chikae.Repository do
     tasks = get_all() ++ [task]
     json  = to_string(Poison.Encoder.encode(tasks, []))
 
-    File.write "tasks.bin", json, [:write, :utf8]
+    File.write file_name(), json, [:write, :utf8]
     task
   end
 
