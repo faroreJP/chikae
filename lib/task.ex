@@ -38,7 +38,7 @@ defmodule Chikae.Task do
     uuid  = uuid_to_s(task, opt)
     state = state_to_s(task, opt)
 
-    "\u001b[33m#{uuid}\u001b[37m \u001b[031m#{state}\u001b[37m #{task.name} \u001b[36m#{DateTime.to_iso8601(date)}\u001b[37m"
+    "\u001b[33m#{uuid} \u001b[31m#{state} \u001b[0m#{task.name} \u001b[36m#{DateTime.to_iso8601(date)}\u001b[0m"
   end
 
   defp uuid_to_s(task, %{:uuid => true}), do: task.uuid
