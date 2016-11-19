@@ -20,9 +20,12 @@ defmodule Chikae.Parser do
     end
   end
 
-  use Chikae.Command.List, :parser
-  use Chikae.Command.Add,  :parser
-  use Chikae.Command.Find, :parser
+  use Chikae.Command.List,    :parser
+  use Chikae.Command.Add,     :parser
+  use Chikae.Command.Find,    :parser
+  use Chikae.Command.Update,  :parser
+  use Chikae.Command.Start,   :parser
+  use Chikae.Command.Finish,  :parser
 
   defp parse_argument(_, _, arg, _) do
     Chikae.log("Invalid Argument : #{arg}")

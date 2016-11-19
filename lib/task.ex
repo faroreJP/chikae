@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "", date: 0, state: ""
+  defstruct uuid: "", name: "New Task", date: 0, state: "NOT-YET"
 
   #------------------------------------------------------------------------------------------
   # Print 
@@ -15,25 +15,28 @@ defmodule Chikae.Task do
   #------------------------------------------------------------------------------------------
 
   def gen(opt) do
-    name  = gen_name(opt)
     date  = DateTime.utc_now()
             |> DateTime.to_unix()
-    state = gen_state(opt)
 
-    %Chikae.Task{uuid: UUID.uuid4(), name: name, date: date, state: state}
+    %Chikae.Task{uuid: UUID.uuid4(), date: date}
+    |> put_name(opt)
+    |> put_state(opt)
   end
 
-  defp gen_name(%{:name => name}),  do: name
-  defp gen_name(_),                 do: "new-task"
+  def put_name(task, %{:name => name}),       do: Map.put(task, :name, name)
+  def put_name(task, _),                      do: task
 
-  defp gen_state(%{:state => state}), do: state
-  defp gen_state(_),                  do: "not-yet"
+  def put_state(task, %{:state => state}),    do: Map.put(task, :state, state)
+  def put_state(task, _),                     do: task
+
+  def put_date(task, opt, %{:date => date}),  do: Map.put(task, :date, date)
+  def put_date(task, opt, _)               ,  do: task
 
   #------------------------------------------------------------------------------------------
   # To String
   #------------------------------------------------------------------------------------------
 
-  def to_s(task, opt) do
+  def to_s(task, opt \\ %{}) do
     date  = DateTime.from_unix!(task.date)
     uuid  = uuid_to_s(task, opt)
     state = state_to_s(task, opt)
@@ -46,5 +49,4 @@ defmodule Chikae.Task do
 
   defp state_to_s(task, %{:hide_state => true}),  do: ""
   defp state_to_s(task, opt),                     do: "[#{task.state}]"
-
 end
