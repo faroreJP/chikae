@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "New Task", date: 0, state: "NOT-YET", category: "work"
+  defstruct uuid: "", name: "New-Task", date: 0, state: "NOT-YET", category: "work"
 
   #------------------------------------------------------------------------------------------
   # Print 
@@ -33,28 +33,40 @@ defmodule Chikae.Task do
   def put_category(task, %{:category => category}),  do: Map.put(task, :category, category)
   def put_category(task, _),                         do: task
 
-  def put_date(task, %{:date => date}),  do: Map.put(task, :date, date)
-  def put_date(task, opt),               do: task
+  def put_date(task, %{:date => date}), do: Map.put(task, :date, date)
+  def put_date(task, _),                do: task
 
   #------------------------------------------------------------------------------------------
   # To String
   #------------------------------------------------------------------------------------------
 
   def to_s(task, opt \\ %{}) do
-    date      = DateTime.from_unix!(task.date)
-    uuid      = uuid_to_s(task, opt)
-    state     = state_to_s(task, opt)
-    category  = category_to_s(task, opt)
+    ""
+    |> uuid_to_s(task, opt)
+    |> state_to_s(task, opt)
+    |> name_to_s(task, opt)
+    |> category_to_s(task, opt)
+    |> date_to_s(task, opt)
 
-    "\u001b[33m#{uuid} \u001b[31m#{state} \u001b[0m#{task.name} \u001b[32m#{category} \u001b[36m#{DateTime.to_iso8601(date)}\u001b[0m"
+    # "\u001b[33m#{uuid} \u001b[31m#{state} \u001b[0m#{task.name} \u001b[32m#{category} \u001b[36m#{DateTime.to_iso8601(date)}\u001b[0m"
   end
 
-  defp uuid_to_s(task, %{:uuid => true}), do: task.uuid
-  defp uuid_to_s(task, opt),              do: String.split(task.uuid, "-") |> hd()
+  defp uuid_to_s(str, task, %{uuid: true, no_color: true}), do: "#{str}#{task.uuid} "
+  defp uuid_to_s(str, task, %{uuid: true}),                 do: "#{str}\u001b[33m#{task.uuid} "
+  defp uuid_to_s(str, task, %{no_color: true}),             do: "#{str}#{String.split(task.uuid, "-") |> hd()} "
+  defp uuid_to_s(str, task, _),                             do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
 
-  defp state_to_s(task, %{:hide_state => true}),  do: ""
-  defp state_to_s(task, opt),                     do: "[#{task.state}]"
+  defp state_to_s(str, _,     %{hide_state: true}), do: str
+  defp state_to_s(str, task,  %{no_color: true}),   do: "#{str}[#{task.state}] "
+  defp state_to_s(str, task,  _),                   do: "#{str}\u001b[31m[#{task.state}] "
 
-  defp category_to_s(task, %{:hide_category => true}),  do: ""
-  defp category_to_s(task, opt),                        do: "<#{task.category}>"
+  defp name_to_s(str, task, _),                     do: "#{str}\u001b[0m#{task.name} "
+
+  defp category_to_s(str, _,    %{hide_category: true}),  do: str
+  defp category_to_s(str, task, %{no_color: true}),       do: "#{str}<#{task.category}> "
+  defp category_to_s(str, task, _),                       do: "#{str}\u001b[32m<#{task.category}> "
+
+  defp date_to_s(str, _,    %{hide_date: true}),  do: str
+  defp date_to_s(str, task, %{no_color: true}),   do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.date))} "
+  defp date_to_s(str, task, _),                   do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m "
 end
