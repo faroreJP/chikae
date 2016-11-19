@@ -5,9 +5,10 @@ defmodule Chikae.Command.Update do
 
   defmacro __using__(:parser) do
     quote do
-      defp parse_argument(opt,  :update,  "--uuid",   pid),  do: Map.put(opt, :uuid,  Queue.get(pid))
-      defp parse_argument(opt,  :update,  "--state",  pid),  do: Map.put(opt, :state, Queue.get(pid))
-      defp parse_argument(opt,  :update,  "--name",   pid),  do: Map.put(opt, :name,  Queue.get(pid))
+      defp parse_argument(opt,  :update,  "--uuid",     pid),  do: Map.put(opt, :uuid,      Queue.get(pid))
+      defp parse_argument(opt,  :update,  "--state",    pid),  do: Map.put(opt, :state,     Queue.get(pid))
+      defp parse_argument(opt,  :update,  "--name",     pid),  do: Map.put(opt, :name,      Queue.get(pid))
+      defp parse_argument(opt,  :update,  "--category", pid),  do: Map.put(opt, :category,  Queue.get(pid))
     end
   end
 
@@ -17,6 +18,7 @@ defmodule Chikae.Command.Update do
         task =  Repository.get(:uuid, opt.uuid)
                 |> Task.put_name(opt)
                 |> Task.put_state(opt)
+                |> Task.put_category(opt)
 
         Task.to_s(task)
         |> IO.write()
