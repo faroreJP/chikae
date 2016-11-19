@@ -3,6 +3,10 @@ defmodule Chikae.Repository do
 
   defp file_name(), do: "tasks.json"
 
+  #------------------------------------------------------------------------------------------
+  # Get
+  #------------------------------------------------------------------------------------------
+
   def get_all() do
     case File.open(file_name(), [:read, :utf8]) do
       {:ok, fp} ->
@@ -22,9 +26,9 @@ defmodule Chikae.Repository do
     Enum.at(tasks, index) 
   end
 
-  def find_index(tasks, uuid) do
-    Enum.find_index(tasks, fn(x) -> String.starts_with?(x.uuid, uuid) end)
-  end
+  #------------------------------------------------------------------------------------------
+  # Set
+  #------------------------------------------------------------------------------------------
 
   def set_all(tasks) do
     json  = to_string(Poison.Encoder.encode(tasks, []))
@@ -48,6 +52,14 @@ defmodule Chikae.Repository do
     |> set_all()
 
     task
+  end
+
+  #------------------------------------------------------------------------------------------
+  # Util
+  #------------------------------------------------------------------------------------------
+
+  def find_index(tasks, uuid) do
+    Enum.find_index(tasks, fn(x) -> String.starts_with?(x.uuid, uuid) end)
   end
 
   def validate_specified_uuid(uuid) do
