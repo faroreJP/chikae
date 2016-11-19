@@ -1,13 +1,13 @@
 defmodule Chikae.Command.Add do
   alias Chikae.Task
   alias Chikae.Repository
+  alias Chikae.Queue
 
   defmacro __using__(:parser) do
     quote do
-      defp parse_argument(opt,  :add,  "--name",  args), do: Map.put(opt, :name,  hd(args))
-      defp parse_argument(opt,  :add,  "--state", args), do: Map.put(opt, :state, hd(args))
-      defp parse_argument(opt,  :add,  "--tag",   args), do: Map.put(opt, :tag,   hd(args))
-      defp parse_argument(opt,  :add,  _,         _   ), do: opt
+      defp parse_argument(opt,  :add,  "--name",  pid), do: Map.put(opt, :name,  Queue.get(pid))
+      defp parse_argument(opt,  :add,  "--state", pid), do: Map.put(opt, :state, Queue.get(pid))
+      defp parse_argument(opt,  :add,  "--tag",   pid), do: Map.put(opt, :tag,   Queue.get(pid))
     end
   end
 

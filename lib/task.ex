@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "", date: 0, state: ""
+  defstruct uuid: "", name: "New Task", date: 0, state: "NOT-YET", category: "work"
 
   #------------------------------------------------------------------------------------------
   # Print 
@@ -15,30 +15,38 @@ defmodule Chikae.Task do
   #------------------------------------------------------------------------------------------
 
   def gen(opt) do
-    name  = gen_name(opt)
     date  = DateTime.utc_now()
             |> DateTime.to_unix()
-    state = gen_state(opt)
 
-    %Chikae.Task{uuid: UUID.uuid4(), name: name, date: date, state: state}
+    %Chikae.Task{uuid: UUID.uuid4(), date: date}
+    |> put_name(opt)
+    |> put_state(opt)
+    |> put_category(opt)
   end
 
-  defp gen_name(%{:name => name}),  do: name
-  defp gen_name(_),                 do: "new-task"
+  def put_name(task, %{:name => name}),       do: Map.put(task, :name, name)
+  def put_name(task, _),                      do: task
 
-  defp gen_state(%{:state => state}), do: state
-  defp gen_state(_),                  do: "not-yet"
+  def put_state(task, %{:state => state}),    do: Map.put(task, :state, state)
+  def put_state(task, _),                     do: task
+
+  def put_category(task, %{:category => category}),  do: Map.put(task, :category, category)
+  def put_category(task, _),                         do: task
+
+  def put_date(task, %{:date => date}),  do: Map.put(task, :date, date)
+  def put_date(task, opt),               do: task
 
   #------------------------------------------------------------------------------------------
   # To String
   #------------------------------------------------------------------------------------------
 
-  def to_s(task, opt) do
-    date  = DateTime.from_unix!(task.date)
-    uuid  = uuid_to_s(task, opt)
-    state = state_to_s(task, opt)
+  def to_s(task, opt \\ %{}) do
+    date      = DateTime.from_unix!(task.date)
+    uuid      = uuid_to_s(task, opt)
+    state     = state_to_s(task, opt)
+    category  = category_to_s(task, opt)
 
-    "\u001b[33m#{uuid}\u001b[37m \u001b[031m#{state}\u001b[37m #{task.name} \u001b[36m#{DateTime.to_iso8601(date)}\u001b[37m"
+    "\u001b[33m#{uuid} \u001b[31m#{state} \u001b[0m#{task.name} \u001b[32m#{category} \u001b[36m#{DateTime.to_iso8601(date)}\u001b[0m"
   end
 
   defp uuid_to_s(task, %{:uuid => true}), do: task.uuid
@@ -47,4 +55,6 @@ defmodule Chikae.Task do
   defp state_to_s(task, %{:hide_state => true}),  do: ""
   defp state_to_s(task, opt),                     do: "[#{task.state}]"
 
+  defp category_to_s(task, %{:hide_category => true}),  do: ""
+  defp category_to_s(task, opt),                        do: "<#{task.category}>"
 end
