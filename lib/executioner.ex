@@ -1,7 +1,8 @@
 defmodule Chikae.Executioner do
-  use Chikae.Command.List, :executioner
-  use Chikae.Command.Add,  :executioner
-  use Chikae.Command.Find, :executioner
+  use Chikae.Command.List,    :executioner
+  use Chikae.Command.Add,     :executioner
+  use Chikae.Command.Find,    :executioner
+  use Chikae.Command.Update,  :executioner
 
   def execute(:help, _) do
      IO.puts "Chikae is TODO management tool by Elixir"
