@@ -1,6 +1,4 @@
 defmodule Chikae.Parser do
-  alias Chikae.Task
-  alias Chikae.Repository
   alias Chikae.Queue
 
   def parse(_,       []   ), do: %{}
@@ -30,9 +28,5 @@ defmodule Chikae.Parser do
   defp parse_argument(_, _, arg, _) do
     Chikae.log("Invalid Argument : #{arg}")
     exit(:boom)
-  end
-
-  def parse("remove", args) do
-    IO.puts "[chikae] Removed Task : #{args}"
   end
 end
