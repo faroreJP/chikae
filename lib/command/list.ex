@@ -5,6 +5,7 @@ defmodule Chikae.Command.List do
   defmacro __using__(:parser) do
     quote do
       defp parse_argument(opt,  :list,  "--uuid",           _), do: Map.put(opt, :uuid,         true)
+      defp parse_argument(opt,  :list,  "--no-color",       _), do: Map.put(opt, :no_color,     true)
       defp parse_argument(opt,  :list,  "--hide-state",     _), do: Map.put(opt, :hide_state,   true)
       defp parse_argument(opt,  :list,  "--hide-category",  _), do: Map.put(opt, :hit_category, true)
     end
