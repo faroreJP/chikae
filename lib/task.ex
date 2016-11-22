@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "New-Task", date: 0, state: "NOT-YET", category: "work"
+  defstruct uuid: "", name: "New-Task", date: 0, state: "NOT-YET", category: "work", parent: "nil"
 
   #------------------------------------------------------------------------------------------
   # Print 
@@ -22,6 +22,7 @@ defmodule Chikae.Task do
     |> put_name(opt)
     |> put_state(opt)
     |> put_category(opt)
+    |> put_parent(opt)
   end
 
   def put_name(task, %{:name => name}),             do: Map.put(task, :name, name)
@@ -35,6 +36,9 @@ defmodule Chikae.Task do
 
   def put_date(task, %{:date => date}),             do: Map.put(task, :date, date)
   def put_date(task, _),                            do: task
+
+  def put_parent(task, %{:parent => parent}),       do: Map.put(task, :parent, parent)
+  def put_parent(task, _),                          do: task
 
   #------------------------------------------------------------------------------------------
   # To String

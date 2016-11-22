@@ -5,9 +5,10 @@ defmodule Chikae.Command.Add do
 
   defmacro __using__(:parser) do
     quote do
-      defp parse_argument(opt,  :add,  "--name",  pid), do: Map.put(opt, :name,  Queue.get(pid))
-      defp parse_argument(opt,  :add,  "--state", pid), do: Map.put(opt, :state, Queue.get(pid))
-      defp parse_argument(opt,  :add,  "--tag",   pid), do: Map.put(opt, :tag,   Queue.get(pid))
+      defp parse_argument(opt,  :add,  "--name",    pid), do: Map.put(opt, :name,   Queue.get(pid))
+      defp parse_argument(opt,  :add,  "--state",   pid), do: Map.put(opt, :state,  Queue.get(pid))
+      defp parse_argument(opt,  :add,  "--tag",     pid), do: Map.put(opt, :tag,    Queue.get(pid))
+      defp parse_argument(opt,  :add,  "--parent",  pid), do: Map.put(opt, :parent, Queue.get(pid))
     end
   end
 
