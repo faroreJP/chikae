@@ -55,7 +55,7 @@ defmodule Chikae.Task do
   defp uuid_to_s(str, task, _),                             do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
 
   defp state_to_s(str, _,     %{hide_state: true}),         do: str
-  defp state_to_s(str, task,  %{no_color: true}),           do: "#{str}#{task.state}]#{String.duplicate(" ", 10 - string_width(task.state))} "
+  defp state_to_s(str, task,  %{no_color: true}),           do: "#{str}[#{task.state}]#{String.duplicate(" ", 10 - string_width(task.state))} "
   defp state_to_s(str, task,  _),                           do: "#{str}\u001b[31m[#{task.state}]#{String.duplicate(" ", 10 - string_width(task.state))} "
 
   defp name_to_s(str, task, _),                             do: "#{str}\u001b[0m#{task.name}#{String.duplicate(" ", 40 - string_width(task.name))} "
