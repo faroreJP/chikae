@@ -8,6 +8,3 @@ The TODO management tool on CLI by Elixir
 
 ## List View All Task
 `./chikae list`
-
-## Find View All Task
-`./chikae list`
