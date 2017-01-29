@@ -62,36 +62,52 @@ defmodule Chikae.Task do
 
   def to_s(task, opt \\ %{}) do
     ""
-    |> uuid_to_s(task, opt)
     |> state_to_s(task, opt)
+    |> uuid_to_s(task, opt)
     |> name_to_s(task, opt)
+    |> parent_to_s(task, opt)
     |> category_to_s(task, opt)
     |> date_to_s(task, opt)
     |> limit_to_s(task, opt)
   end
 
-  defp uuid_to_s(str, task, %{uuid: true, no_color: true}), do: "#{str}#{task.uuid} "
-  defp uuid_to_s(str, task, %{uuid: true}),                 do: "#{str}\u001b[33m#{task.uuid} "
-  defp uuid_to_s(str, task, %{no_color: true}),             do: "#{str}#{String.split(task.uuid, "-") |> hd()} "
-  defp uuid_to_s(str, task, _),                             do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
 
-  defp state_to_s(str, _,     %{hide_state: true}),         do: str
-  defp state_to_s(str, task,  %{no_color: true}),           do: "#{str}[#{task.state}]#{String.duplicate(" ", 10 - string_width(task.state))} "
-  defp state_to_s(str, task,  _),                           do: "#{str}\u001b[31m[#{task.state}]#{String.duplicate(" ", 10 - string_width(task.state))} "
+  defp uuid_to_s(str, task, %{uuid: true, verbose: true, raw: true}), do: "#{str}#{task.uuid} "
+  defp uuid_to_s(str, task, %{uuid: true, verbose: true}),            do: "#{str}\u001b[33m#{task.uuid} "
+  defp uuid_to_s(str, task, %{uuid: true, raw: true}),                do: "#{str}#{String.split(task.uuid, "-") |> hd()} "
+  defp uuid_to_s(str, task, %{uuid: true}),                           do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
+  defp uuid_to_s(str, task, _),                                       do: str
 
-  defp name_to_s(str, task, _),                             do: "#{str}\u001b[0m#{task.name}#{String.duplicate(" ", 40 - string_width(task.name))} "
+  defp state_to_s(str, task,  %{raw: true}),            do: "#{str}[#{task.state}]#{String.duplicate(" ", 10 - string_width("[#{task.state}]"))} "
+  defp state_to_s(str, task,  _),                       do: "#{str}\u001b[31m[#{task.state}]#{String.duplicate(" ", 10 - string_width("[#{task.state}]"))} "
 
-  defp category_to_s(str, _,    %{hide_category: true}),    do: str
-  defp category_to_s(str, task, %{no_color: true}),         do: "#{str}<#{task.category}>#{String.duplicate(" ", 12 - string_width(task.category))} "
-  defp category_to_s(str, task, _),                         do: "#{str}\u001b[32m<#{task.category}>#{String.duplicate(" ", 12 - string_width(task.category))} "
+  defp name_to_s(str, task, _), do: "#{str}\u001b[0m#{task.name}#{String.duplicate(" ", 30 - string_width(task.name))} "
 
-  defp date_to_s(str, _,    %{hide_date: true}),            do: str
-  defp date_to_s(str, task, %{no_color: true}),             do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}"
-  defp date_to_s(str, task, _),                             do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m"
+  defp category_to_s(str, task, %{raw: true}),            do: "#{str}<#{task.category}>#{String.duplicate(" ", 12 - string_width("<#{task.category}>"))} "
+  defp category_to_s(str, task, _),                       do: "#{str}\u001b[32m<#{task.category}>#{String.duplicate(" ", 12 - string_width("<#{task.category}>"))} "
 
-  defp limit_to_s(str, _,    %{hide_limit: true}),          do: str
-  defp limit_to_s(str, task, %{no_color: true}),            do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))}"
-  defp limit_to_s(str, task, _),                            do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))}\u001b[0m"
+  defp date_to_s(str, task, %{verbose: true, raw: true}), do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.date))} "
+  defp date_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m "
+  defp date_to_s(str, task, _),                           do: str
+
+  defp limit_to_s(str, task, %{raw: true}),         do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))} "
+  defp limit_to_s(str, task, _),                    do: "#{str}\u001b[35m#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))}\u001b[0m "
+
+  defp parent_to_s(str, task, %{tree: true}), do: str
+  defp parent_to_s(str, task, %{verbose: true}) do
+    if task.parent == "" do
+      "#{str}<none>#{String.duplicate(" ", 30 - string_width("<none>"))} "
+    else 
+      case Chikae.Repository.get(:uuid, task.parent) do
+        nil ->
+          "#{str}<missing>#{String.duplicate(" ", 30 - string_width("<missing>"))} "
+        parent_task ->
+          "#{str}#{parent_task.name}#{String.duplicate(" ", 30 - string_width(parent_task.name))} "
+      end
+    end
+  end
+  defp parent_to_s(str, task, _), do: str
+
 
   defp string_width(str) do
     String.codepoints(str)
