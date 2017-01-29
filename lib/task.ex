@@ -78,19 +78,19 @@ defmodule Chikae.Task do
   defp uuid_to_s(str, task, %{uuid: true}),                           do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
   defp uuid_to_s(str, task, _),                                       do: str
 
-  defp state_to_s(str, task,  %{raw: true}),            do: "#{str}[#{task.state}]#{String.duplicate(" ", 10 - string_width("[#{task.state}]"))} "
-  defp state_to_s(str, task,  _),                       do: "#{str}\u001b[31m[#{task.state}]#{String.duplicate(" ", 10 - string_width("[#{task.state}]"))} "
+  defp state_to_s(str, task,  %{raw: true}),            do: "#{str}[#{task.state}] "
+  defp state_to_s(str, task,  _),                       do: "#{str}\u001b[31m[#{task.state}] "
 
   defp name_to_s(str, task, _) do
     if task.is_pruned do
-      "#{str}\u001b[0m*#{task.name}#{String.duplicate(" ", 30 - string_width("*#{task.name}"))} "
+      "#{str}\u001b[0m*#{task.name} "
     else 
-      "#{str}\u001b[0m#{task.name}#{String.duplicate(" ", 30 - string_width(task.name))} "
+      "#{str}\u001b[0m#{task.name} "
     end 
   end
 
-  defp category_to_s(str, task, %{raw: true}),            do: "#{str}<#{task.category}>#{String.duplicate(" ", 12 - string_width("<#{task.category}>"))} "
-  defp category_to_s(str, task, _),                       do: "#{str}\u001b[32m<#{task.category}>#{String.duplicate(" ", 12 - string_width("<#{task.category}>"))} "
+  defp category_to_s(str, task, %{raw: true}),            do: "#{str}<#{task.category}> "
+  defp category_to_s(str, task, _),                       do: "#{str}\u001b[32m<#{task.category}> "
 
   defp date_to_s(str, task, %{verbose: true, raw: true}), do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.date))} "
   defp date_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m "
@@ -102,13 +102,13 @@ defmodule Chikae.Task do
   defp parent_to_s(str, task, %{tree: true}), do: str
   defp parent_to_s(str, task, %{verbose: true}) do
     if task.parent == "" do
-      "#{str}<none>#{String.duplicate(" ", 30 - string_width("<none>"))} "
+      "#{str}<none> "
     else 
       case Chikae.Repository.get(:uuid, task.parent) do
         nil ->
-          "#{str}<missing>#{String.duplicate(" ", 30 - string_width("<missing>"))} "
+          "#{str}<missing> "
         parent_task ->
-          "#{str}#{parent_task.name}#{String.duplicate(" ", 30 - string_width(parent_task.name))} "
+          "#{str}#{parent_task.name} "
       end
     end
   end
