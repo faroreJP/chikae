@@ -9,6 +9,8 @@ defmodule Chikae.Command.Add do
 
       defp parse_argument(opt, :add, "--limit", pid), do: Map.put(opt, :limit, Queue.get(pid))
 
+      defp parse_argument(opt, :add, "--parent", pid), do: Map.put(opt, :parent, Queue.get(pid))
+
       defp parse_argument(opt, :add, name, pid) do
         case Map.has_key?(opt, :name) do
           false -> 
