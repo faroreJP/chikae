@@ -42,19 +42,18 @@ defmodule Chikae.Task do
   def put_limit(task, _),                           do: task
 
   def put_parent(task, %{:parent => parent}) do 
-    if Chikae.Repository.get(:uuid, parent) == nil do
-      parent_task = Chikae.Repository.get(:name, parent)
-
+    parent_task = Chikae.Repository.get(:name, parent)
+    if parent_task != nil do
+      Map.put(task, :parent, parent_task.uuid)
+    else
+      parent_task = Chikae.Repository.get(:uuid, parent)
       if parent_task == nil do
         Chikae.log("task '#{parent}' is not found!")
         exit(:boom)
       end
-
-      Map.put(task, :parent, parent_task.uuid)
-    else
-      Map.put(task, :parent, parent)
     end
   end
+
   def put_parent(task, _), do: task
 
   #------------------------------------------------------------------------------------------
