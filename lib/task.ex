@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "New-Task", date: 0, limit: 0, state: "TODO", category: "work", parent: ""
+  defstruct uuid: "", name: "New-Task", date: 0, limit: 0, state: "TODO", category: "work", parent: "", is_pruned: false
 
   #------------------------------------------------------------------------------------------
   # Print 
@@ -81,7 +81,13 @@ defmodule Chikae.Task do
   defp state_to_s(str, task,  %{raw: true}),            do: "#{str}[#{task.state}]#{String.duplicate(" ", 10 - string_width("[#{task.state}]"))} "
   defp state_to_s(str, task,  _),                       do: "#{str}\u001b[31m[#{task.state}]#{String.duplicate(" ", 10 - string_width("[#{task.state}]"))} "
 
-  defp name_to_s(str, task, _), do: "#{str}\u001b[0m#{task.name}#{String.duplicate(" ", 30 - string_width(task.name))} "
+  defp name_to_s(str, task, _) do
+    if task.is_pruned do
+      "#{str}\u001b[0m*#{task.name}#{String.duplicate(" ", 30 - string_width("*#{task.name}"))} "
+    else 
+      "#{str}\u001b[0m#{task.name}#{String.duplicate(" ", 30 - string_width(task.name))} "
+    end 
+  end
 
   defp category_to_s(str, task, %{raw: true}),            do: "#{str}<#{task.category}>#{String.duplicate(" ", 12 - string_width("<#{task.category}>"))} "
   defp category_to_s(str, task, _),                       do: "#{str}\u001b[32m<#{task.category}>#{String.duplicate(" ", 12 - string_width("<#{task.category}>"))} "

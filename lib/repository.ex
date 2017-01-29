@@ -10,7 +10,7 @@ defmodule Chikae.Repository do
     case File.open(file_name(), [:read, :utf8]) do
       {:ok, fp} ->
         IO.read(fp, :all)
-        |> Poison.Parser.parse!(keys: :atoms!)
+        |> Poison.Parser.parse!(keys: :atoms)
       {:error, _} ->
         []
     end
@@ -60,6 +60,13 @@ defmodule Chikae.Repository do
   def insert(task) do
     get_all()
     |> Enum.concat([task])
+    |> set_all()
+    task
+  end
+
+  def remove(task) do
+    get_all()
+    |> Enum.filter( fn(x) -> x.uuid != task.uuid end )
     |> set_all()
 
     task
