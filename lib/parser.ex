@@ -24,6 +24,7 @@ defmodule Chikae.Parser do
   use Chikae.Command.Update,  :parser
   use Chikae.Command.Start,   :parser
   use Chikae.Command.Finish,  :parser
+  use Chikae.Command.Pend,    :parser
 
   defp parse_argument(_opt, _command, arg, _pid) do
     Chikae.log("Invalid Argument : #{arg}")
