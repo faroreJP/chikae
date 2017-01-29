@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "New-Task", date: 0, state: "NOT-YET", category: "work"
+  defstruct uuid: "", name: "New-Task", date: 0, state: "NOT-YET", category: "work", parent: ""
 
   #------------------------------------------------------------------------------------------
   # Print 
