@@ -23,7 +23,6 @@ defmodule Chikae.Command.List do
 
       defp is_all(%{all: true}), do: true
       defp is_all(_opt),         do: false
-
     end
   end
 end

@@ -38,8 +38,16 @@ defmodule Chikae.Task do
   def put_date(task, %{:date => date}),             do: Map.put(task, :date, date)
   def put_date(task, _),                            do: task
 
-  def put_limit(task, %{:limit => limit}),          do: Map.put(task, :limit, limit)
-  def put_limit(task, _),                           do: task
+  def put_limit(task, %{:limit => limit}) do
+    case DateTime.from_iso8601(limit) do
+      {:ok, limit_date} ->
+        Map.put(task, :limit, DateTime.to_unix(limit_date))
+      {:error, _} ->
+        Chikae.log("invalid date time format")
+        exit(:boom)
+    end
+  end
+  def put_limit(task, _), do: task
 
   def put_parent(task, %{:parent => parent}) do 
     parent_task = Chikae.Repository.get(:name, parent)
@@ -105,6 +113,7 @@ defmodule Chikae.Task do
   defp date_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m "
   defp date_to_s(str, task, _),                           do: str
 
+  defp limit_to_s(str, %{limit: 0}, _),             do: str
   defp limit_to_s(str, task, %{raw: true}),         do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))} "
   defp limit_to_s(str, task, _),                    do: "#{str}\u001b[35m#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))}\u001b[0m "
 
