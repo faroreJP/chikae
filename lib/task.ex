@@ -64,8 +64,8 @@ defmodule Chikae.Task do
     ""
     |> state_to_s(task, opt)
     |> uuid_to_s(task, opt)
-    |> name_to_s(task, opt)
     |> parent_to_s(task, opt)
+    |> name_to_s(task, opt)
     |> category_to_s(task, opt)
     |> date_to_s(task, opt)
     |> limit_to_s(task, opt)
@@ -80,6 +80,15 @@ defmodule Chikae.Task do
 
   defp state_to_s(str, task,  %{raw: true}),            do: "#{str}[#{task.state}] "
   defp state_to_s(str, task,  _),                       do: "#{str}\u001b[31m[#{task.state}] "
+
+  defp parent_to_s(str, task, %{type: :directory}),  do: "#{str}\u001b[0m/#{find_parent("", task.parent)}"
+  defp parent_to_s(str, task, _),                   do: str
+
+  defp find_parent(str, ""), do: str
+  defp find_parent(str, parent_uuid) do
+    parent_task = Chikae.Repository.get(:uuid, parent_uuid)
+    find_parent("#{parent_task.name}/#{str}", parent_task.parent)
+  end
 
   defp name_to_s(str, task, _) do
     if task.is_pruned do

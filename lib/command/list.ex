@@ -4,10 +4,11 @@ defmodule Chikae.Command.List do
 
   defmacro __using__(:parser) do
     quote do
-      defp parse_argument(opt,  :list,  "--uuid",     _),   do: Map.put(opt, :uuid,     true)
-      defp parse_argument(opt,  :list,  "--raw",      _),   do: Map.put(opt, :raw,      true)
-      defp parse_argument(opt,  :list,  "--verbose",  _),   do: Map.put(opt, :verbose,  true)
-      defp parse_argument(opt,  :list,  "--all",  _),       do: Map.put(opt, :all,      true)
+      defp parse_argument(opt,  :list,  "--directory",_), do: Map.put(opt, :type,     :directory)
+      defp parse_argument(opt,  :list,  "--uuid", _),     do: Map.put(opt, :uuid,     true)
+      defp parse_argument(opt,  :list,  "--raw", _),      do: Map.put(opt, :raw,      true)
+      defp parse_argument(opt,  :list,  "--verbose", _),  do: Map.put(opt, :verbose,  true)
+      defp parse_argument(opt,  :list,  "--all", _),      do: Map.put(opt, :all,      true)
     end
   end
 
