@@ -9,7 +9,18 @@ defmodule Chikae.Executioner do
   use Chikae.Command.Prune,   :executioner
 
   def execute(:help, _) do
-     IO.puts "Chikae is TODO management tool by Elixir"
+    IO.puts """
+    usage:
+      chikae <command> [<args>]
+    
+    command:
+      add <name> [--limit <limit>] [--parent <parent>]
+      list [--parent {<name>|<uuid>} [--recursive] | --directory | --tree] [--uuid] [--verbose] [--all]
+      start {<name> | <uuid>}
+      finish {<name> | <uuid>}
+      pend {<name> | <uuid>}
+      prune
+    """
   end
 
   def execute(command, _) do
