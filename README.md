@@ -23,3 +23,4 @@ $ chikae pend {<name> | <uuid>}
 ```
 $ chikae prune
 ```
+
