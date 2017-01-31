@@ -79,12 +79,10 @@ defmodule Chikae.Task do
     |> limit_to_s(task, opt)
   end
 
-
-  defp uuid_to_s(str, task, %{uuid: true, verbose: true, raw: true}), do: "#{str}#{task.uuid} "
-  defp uuid_to_s(str, task, %{uuid: true, verbose: true}),            do: "#{str}\u001b[33m#{task.uuid} "
-  defp uuid_to_s(str, task, %{uuid: true, raw: true}),                do: "#{str}#{String.split(task.uuid, "-") |> hd()} "
-  defp uuid_to_s(str, task, %{uuid: true}),                           do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
-  defp uuid_to_s(str, task, _),                                       do: str
+  defp uuid_to_s(str, task, %{verbose: true, raw: true}), do: "#{str}#{task.uuid} "
+  defp uuid_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[33m#{task.uuid} "
+  defp uuid_to_s(str, task, %{raw: true}),                do: "#{str}#{String.split(task.uuid, "-") |> hd()} "
+  defp uuid_to_s(str, task, _),                           do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
 
   defp state_to_s(str, task,  %{raw: true}),            do: "#{str}[#{task.state}] "
   defp state_to_s(str, task,  _),                       do: "#{str}\u001b[31m[#{task.state}] "
