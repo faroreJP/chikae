@@ -1,13 +1,25 @@
-# Chikae
+# About
 The TODO management tool on CLI by Elixir
 
 # Usage
+## Add Task
+```
+$ chikae add <name> [--limit <limit>] [--parent <parent>]
+```
 
-## Add New Task
-`./chikae add`
+## Show Task
+```
+$ chikae list [--parent {<name>|<uuid>} [--recursive] | --directory | --tree] [--uuid] [--verbose] [--all]
+```
 
-## List View All Task
-`./chikae list`
+## Update Task Progress
+```
+$ chikae start {<name> | <uuid>}
+$ chikae finish {<name> | <uuid>}
+$ chikae pend {<name> | <uuid>}
+```
 
-## Find View All Task
-`./chikae list`
+## Prune Done Task
+```
+$ chikae prune
+```

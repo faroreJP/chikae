@@ -1,5 +1,4 @@
 defmodule Chikae.Repository do
-  alias Chikae.Task
 
   defp file_name(), do: "tasks.json"
 
@@ -11,7 +10,7 @@ defmodule Chikae.Repository do
     case File.open(file_name(), [:read, :utf8]) do
       {:ok, fp} ->
         IO.read(fp, :all)
-        |> Poison.Parser.parse!(keys: :atoms!)
+        |> Poison.Parser.parse!(keys: :atoms)
       {:error, _} ->
         []
     end
@@ -19,11 +18,23 @@ defmodule Chikae.Repository do
 
   def get(:uuid, uuid) do
     validate_specified_uuid(uuid)
-
     tasks = get_all() 
-    index = find_index(tasks, uuid)
+    case find_index_by_uuid(tasks, uuid) do
+      nil -> 
+        nil
+      index ->
+        Enum.at(tasks, index) 
+    end
+  end
 
-    Enum.at(tasks, index) 
+  def get(:name, name) do
+    tasks = get_all() 
+    case Enum.find_index(tasks, fn(x) -> x.name == name end) do
+      nil ->
+        nil
+      index ->
+        Enum.at(tasks, index)
+    end
   end
 
   #------------------------------------------------------------------------------------------
@@ -39,7 +50,7 @@ defmodule Chikae.Repository do
 
   def set(task) do
     tasks = get_all()
-    index = find_index(tasks, task.uuid)
+    index = find_index_by_uuid(tasks, task.uuid)
 
     tasks
     |> List.replace_at(index, task)
@@ -50,6 +61,13 @@ defmodule Chikae.Repository do
     get_all()
     |> Enum.concat([task])
     |> set_all()
+    task
+  end
+
+  def remove(task) do
+    get_all()
+    |> Enum.filter( fn(x) -> x.uuid != task.uuid end )
+    |> set_all()
 
     task
   end
@@ -58,7 +76,7 @@ defmodule Chikae.Repository do
   # Util
   #------------------------------------------------------------------------------------------
 
-  def find_index(tasks, uuid) do
+  def find_index_by_uuid(tasks, uuid) do
     Enum.find_index(tasks, fn(x) -> String.starts_with?(x.uuid, uuid) end)
   end
 
@@ -66,6 +84,7 @@ defmodule Chikae.Repository do
     if String.length(uuid) >= 8 do
       true
     else
+      Chikae.log("uuid must be 8 or longer than!")
       exit(:boom)
     end
   end
