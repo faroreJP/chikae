@@ -40,7 +40,7 @@ defmodule Chikae.Task do
 
   def put_limit(task, %{:limit => limit}) do
     case DateTime.from_iso8601(limit) do
-      {:ok, limit_date} ->
+      {:ok, limit_date, _} ->
         Map.put(task, :limit, DateTime.to_unix(limit_date))
       {:error, _} ->
         Chikae.log("invalid date time format")
