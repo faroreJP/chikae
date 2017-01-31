@@ -73,9 +73,9 @@ defmodule Chikae.Task do
     |> uuid_to_s(task, opt)
     |> category_to_s(task, opt)
     |> state_to_s(task, opt)
-    |> parent_to_s(task, opt)
     |> date_to_s(task, opt)
     |> limit_to_s(task, opt)
+    |> parent_to_s(task, opt)
     |> name_to_s(task, opt)
   end
 
