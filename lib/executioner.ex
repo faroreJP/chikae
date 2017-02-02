@@ -14,8 +14,8 @@ defmodule Chikae.Executioner do
       chikae <command> [<args>]
     
     command:
-      add <name> [--limit <limit>] [--parent <parent>]
-      list [--parent {<name>|<uuid>} [--recursive] | --directory | --tree] [--uuid] [--verbose] [--all]
+      add <name> [--limit <limit>] [--parent {<parent_name> | <parent_uuid>}]
+      list [--parent {<name>|<uuid>} [--recursive] | --directory | --tree] [--verbose] [--all]
       start {<name> | <uuid>}
       finish {<name> | <uuid>}
       pend {<name> | <uuid>}
