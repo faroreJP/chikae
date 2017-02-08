@@ -87,8 +87,10 @@ defmodule Chikae.Task do
   defp uuid_to_s(str, task, %{raw: true}),                do: "#{str}#{String.split(task.uuid, "-") |> hd()} "
   defp uuid_to_s(str, task, _),                           do: "#{str}\u001b[33m#{String.split(task.uuid, "-") |> hd()} "
 
-  defp state_to_s(str, task,  %{raw: true}),  do: "#{str}[#{task.state}]#{String.duplicate(" ", 8 - string_width(task.state))} "
-  defp state_to_s(str, task,  _),             do: "#{str}\u001b[31m[#{task.state}]#{String.duplicate(" ", 8 - string_width(task.state))} "
+  defp state_to_s(str, task,  %{raw: true}),    do: "#{str}[#{task.state}]#{String.duplicate(" ", 8 - string_width(task.state))} "
+  defp state_to_s(str, %{state: "DOING"}, _),   do: "#{str}\u001b[31m[DOING]#{String.duplicate(" ", 8 - string_width("DOING"))} "
+  defp state_to_s(str, %{state: "DONE"}, _),    do: "#{str}\u001b[36m[DONE]#{String.duplicate(" ", 8 - string_width("DONE"))} "
+  defp state_to_s(str, task,  _),               do: "#{str}\u001b[0m[#{task.state}]#{String.duplicate(" ", 8 - string_width(task.state))} "
 
   defp parent_to_s(str, task, %{type: :directory}), do: "#{str}\u001b[0m/#{find_parent("", task.parent)}"
   defp parent_to_s(str, _, _),                      do: str
@@ -107,16 +109,14 @@ defmodule Chikae.Task do
     end 
   end
 
-  defp category_to_s(str, task, %{raw: true}),            do: "#{str}<#{task.category}>#{String.duplicate(" ", 7 - string_width(task.category))} "
-  defp category_to_s(str, task, _),                       do: "#{str}\u001b[32m<#{task.category}>#{String.duplicate(" ", 7 - string_width(task.category))} "
+  defp category_to_s(str, task, _), do: "#{str}\u001b[0m<#{task.category}>#{String.duplicate(" ", 7 - string_width(task.category))} "
 
   defp date_to_s(str, task, %{verbose: true, raw: true}), do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.date))} "
   defp date_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m "
   defp date_to_s(str, _, _),                              do: str
 
-  defp limit_to_s(str, %{limit: 0}, _),             do: str
-  defp limit_to_s(str, task, %{raw: true}),         do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))} "
-  defp limit_to_s(str, task, _),                    do: "#{str}\u001b[35m#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))}\u001b[0m "
+  defp limit_to_s(str, %{limit: 0}, _),  do: "#{str}\u001b[0m"
+  defp limit_to_s(str, task, _),         do: "#{str}\u001b[0m#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))} "
 
   defp string_width(str) do
     String.codepoints(str)
