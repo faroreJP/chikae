@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "New-Task", date: NaiveDateTime.utc_now(), limit: "", state: "TODO", category: "work", parent: "", is_pruned: false
+  defstruct uuid: "", name: "New-Task", date: "", limit: "", state: "TODO", category: "work", parent: "", is_pruned: false
 
   #------------------------------------------------------------------------------------------
   # Print 
