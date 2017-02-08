@@ -1,6 +1,6 @@
 defmodule Chikae.Repository do
 
-  defp file_name(), do: "tasks.json"
+  defp file_name(), do: Chikae.Constants.get_persistent_path() <> "tasks.json"
 
   #------------------------------------------------------------------------------------------
   # Get
