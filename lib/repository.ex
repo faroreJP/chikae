@@ -1,6 +1,14 @@
 defmodule Chikae.Repository do
 
-  defp file_name(), do: "tasks.json"
+  defp file_name() do
+    directory = Chikae.Constants.get_persistent_path()
+
+    if !File.exists?(directory) do 
+      File.mkdir(directory)
+    end
+
+    directory <> "tasks.json"
+  end
 
   #------------------------------------------------------------------------------------------
   # Get
