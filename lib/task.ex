@@ -1,5 +1,5 @@
 defmodule Chikae.Task do
-  defstruct uuid: "", name: "New-Task", date: 0, limit: 0, state: "TODO", category: "work", parent: "", is_pruned: false
+  defstruct uuid: "", name: "New-Task", date: NaiveDateTime.utc_now(), limit: "", state: "TODO", category: "work", parent: "", is_pruned: false
 
   #------------------------------------------------------------------------------------------
   # Print 
@@ -15,8 +15,9 @@ defmodule Chikae.Task do
   #------------------------------------------------------------------------------------------
 
   def gen(opt) do
-    date  = DateTime.utc_now()
-            |> DateTime.to_unix()
+
+    date = get_current_time()
+           |> NaiveDateTime.to_string()
 
     %Chikae.Task{uuid: UUID.uuid4(), date: date}
     |> put_name(opt)
@@ -39,11 +40,11 @@ defmodule Chikae.Task do
   def put_date(task, _),                            do: task
 
   def put_limit(task, %{:limit => limit}) do
-    case DateTime.from_iso8601(limit) do
-      {:ok, limit_date, _} ->
-        Map.put(task, :limit, DateTime.to_unix(limit_date))
+    case NaiveDateTime.from_iso8601(limit) do
+      {:ok, time} ->
+        Map.put(task, :limit, NaiveDateTime.to_string(time) )
       {:error, _} ->
-        Chikae.log("invalid date time format")
+        Chikae.log("invalid date time format!")
         exit(:boom)
     end
   end
@@ -66,6 +67,13 @@ defmodule Chikae.Task do
   end
 
   def put_parent(task, _), do: task
+
+  defp get_current_time() do
+    {erl_date, erl_time} = :calendar.local_time()
+    {:ok, date}          = NaiveDateTime.new( Date.from_erl!(erl_date), Time.from_erl!(erl_time) )
+
+    date
+  end
 
   #------------------------------------------------------------------------------------------
   # To String
@@ -111,12 +119,11 @@ defmodule Chikae.Task do
 
   defp category_to_s(str, task, _), do: "#{str}\u001b[0m<#{task.category}>#{String.duplicate(" ", 7 - string_width(task.category))} "
 
-  defp date_to_s(str, task, %{verbose: true, raw: true}), do: "#{str}#{DateTime.to_iso8601(DateTime.from_unix!(task.date))} "
-  defp date_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[36m#{DateTime.to_iso8601(DateTime.from_unix!(task.date))}\u001b[0m "
+  defp date_to_s(str, task, %{verbose: true}),            do: "#{str}\u001b[0m#{task.date} "
   defp date_to_s(str, _, _),                              do: str
 
-  defp limit_to_s(str, %{limit: 0}, _),  do: "#{str}\u001b[0m"
-  defp limit_to_s(str, task, _),         do: "#{str}\u001b[0m#{DateTime.to_iso8601(DateTime.from_unix!(task.limit))} "
+  defp limit_to_s(str, %{limit: ""}, _),  do: "#{str}\u001b[0m"
+  defp limit_to_s(str, task, _),          do: "#{str}\u001b[0m#{task.limit} "
 
   defp string_width(str) do
     String.codepoints(str)
