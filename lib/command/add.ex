@@ -4,7 +4,7 @@ defmodule Chikae.Command.Add do
 
   defmacro __using__(:executioner) do
     quote do
-      def execute(:add, opts, [name]) do
+      def execute(:add, [name], opts) do
         task =  Map.put(opts, :name, name)
                 |> Task.gen()
                 |> Repository.insert()
@@ -13,7 +13,7 @@ defmodule Chikae.Command.Add do
         Chikae.log("Added Task:\r\n#{task}")
       end
 
-      def execute(:add, opts, _arg) do
+      def execute(:add, _args, opts) do
         Chikae.log("Parse Error : name is invalid or missing")
       end
     end

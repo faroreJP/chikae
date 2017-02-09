@@ -7,7 +7,7 @@ defmodule Chikae.Executioner do
   use Chikae.Command.Pend,    :executioner
   use Chikae.Command.Prune,   :executioner
 
-  def execute(:help, _opt, _arg) do
+  def execute(:help, _args, _opts) do
     IO.puts """
     usage:
       chikae <command> [<args>]

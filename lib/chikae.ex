@@ -1,7 +1,7 @@
 defmodule Chikae do
 
   def main([]) do
-    Chikae.Executioner.execute(:help, nil)
+    Chikae.Executioner.execute(:help, [], %{})
   end
 
   def main(argv) do

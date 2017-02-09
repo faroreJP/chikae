@@ -16,15 +16,6 @@ defmodule Chikae.Repository do
     end
   end
 
-  def get(name) do
-    case Repository.get(:name, name) do
-      nil ->
-        Repository.get(:uuid, name)
-      task ->
-        task
-    end
-  end
-
   def get(:uuid, uuid) do
     validate_specified_uuid(uuid)
     tasks = get_all() 
@@ -45,6 +36,16 @@ defmodule Chikae.Repository do
         Enum.at(tasks, index)
     end
   end
+
+  def get(name) do
+    case get(:name, name) do
+      nil ->
+        get(:uuid, name)
+      task ->
+        task
+    end
+  end
+
 
   #------------------------------------------------------------------------------------------
   # Set
