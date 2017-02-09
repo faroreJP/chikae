@@ -22,7 +22,7 @@ defmodule Chikae.Executioner do
     """
   end
 
-  def execute(command, _opt, _arg) do
+  def execute(command, _args, _opts) do
     IO.puts "[chikae] Invalid Command : #{command}"
     exit(:boom)
   end
