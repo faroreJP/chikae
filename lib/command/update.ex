@@ -1,29 +1,32 @@
 defmodule Chikae.Command.Update do
   alias Chikae.Task
   alias Chikae.Repository
-  alias Chikae.Queue
-
-  defmacro __using__(:parser) do
-    quote do
-      defp parse_argument(opt,  :update,  "--uuid",     pid),  do: Map.put(opt, :uuid,      Queue.get(pid))
-      defp parse_argument(opt,  :update,  "--state",    pid),  do: Map.put(opt, :state,     Queue.get(pid))
-      defp parse_argument(opt,  :update,  "--name",     pid),  do: Map.put(opt, :name,      Queue.get(pid))
-      defp parse_argument(opt,  :update,  "--category", pid),  do: Map.put(opt, :category,  Queue.get(pid))
-    end
-  end
 
   defmacro __using__(:executioner) do
     quote do
-      def execute(:update, opt) do
-        task =  Repository.get(:uuid, opt.uuid)
-                |> Task.put_name(opt)
-                |> Task.put_state(opt)
-                |> Task.put_category(opt)
+      def execute(:update, [name], opts) do
+        case Repository.get(name) do
+          nil ->
+            # error
+            Chikae.log("#{name} is not found!")
+            exit(:boom)
 
-        Task.to_s(task)
-        |> IO.write()
+          task ->
+            # update
+            updated_task = task
+                            |> Task.put_name(opts)
+                            |> Task.put_state(opts)
+                            |> Task.put_category(opts)
 
-        Repository.set(task)
+            Task.to_s(updated_task, opts)
+            |> IO.write()
+            Repository.set(task)
+        end
+      end
+
+      def execute(:update, args, _opts) do
+        Chikae.log("Invalid Argument! : #{args}")
+        exit(:boom)
       end
     end
   end
