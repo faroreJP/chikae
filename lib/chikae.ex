@@ -1,13 +1,23 @@
 defmodule Chikae do
 
   def main([]) do
-    Chikae.Executioner.execute(:help, nil)
+    Chikae.Executioner.execute(:help, [], %{})
   end
 
   def main(argv) do
+    # extract command from argv
     command = hd(argv) |> String.to_atom()
-    opt     = Chikae.Parser.parse(command, tl(argv))
-    Chikae.Executioner.execute(command, opt)
+
+    case OptionParser.parse(tl(argv)) do
+      {opts, arg, []} -> 
+        # process specified command
+        Chikae.Executioner.execute(command, arg, Enum.into(opts, %{}))
+
+      {_opt, _arg, err} ->
+        # error 
+        Chikae.log("Parse Error : #{err}")
+        exit(:boom)
+    end
   end
 
   def log(str) do

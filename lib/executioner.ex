@@ -1,14 +1,13 @@
 defmodule Chikae.Executioner do
   use Chikae.Command.List,    :executioner
   use Chikae.Command.Add,     :executioner
-  use Chikae.Command.Find,    :executioner
   use Chikae.Command.Update,  :executioner
   use Chikae.Command.Start,   :executioner
   use Chikae.Command.Finish,  :executioner
   use Chikae.Command.Pend,    :executioner
   use Chikae.Command.Prune,   :executioner
 
-  def execute(:help, _) do
+  def execute(:help, _args, _opts) do
     IO.puts """
     usage:
       chikae <command> [<args>]
@@ -23,7 +22,7 @@ defmodule Chikae.Executioner do
     """
   end
 
-  def execute(command, _) do
+  def execute(command, _args, _opts) do
     IO.puts "[chikae] Invalid Command : #{command}"
     exit(:boom)
   end
