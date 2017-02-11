@@ -11,6 +11,11 @@ $ mix escript.build
 ```
 
 # Usage
+## Help
+```
+$ chikae
+```
+
 ## Add Task
 ```
 $ chikae add <name> [--limit <limit>] [--parent {<parent_name> | <parent_uuid>}]
@@ -18,7 +23,7 @@ $ chikae add <name> [--limit <limit>] [--parent {<parent_name> | <parent_uuid>}]
 
 ## Show Task
 ```
-$ chikae list [--parent {<name>|<uuid>} [-r | --recursive] | --tree] [-v | --verbose] [-a | --all]
+$ chikae list [--parent {<name>|<uuid>} [-r | --recursive] | --tree] [-v | --verbose] [-a | --all] [--raw]
 ```
 
 ## Update Task Progress
