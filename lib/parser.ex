@@ -4,8 +4,7 @@ defmodule Chikae.Parser do
   use Chikae.Command.Update,  :parser
 
   def get_requirements(command) do
-    Chikae.log("Invalid command! : #{command}")
-    exit(:boom)
+    {:ok, [], []}
   end
 
 end
