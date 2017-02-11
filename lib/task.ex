@@ -100,13 +100,13 @@ defmodule Chikae.Task do
   defp state_to_s(str, %{state: "DONE"}, _),    do: "#{str}\u001b[36m[DONE]#{String.duplicate(" ", 8 - string_width("DONE"))} "
   defp state_to_s(str, task,  _),               do: "#{str}\u001b[0m[#{task.state}]#{String.duplicate(" ", 8 - string_width(task.state))} "
 
-  defp parent_to_s(str, task, %{type: :directory}), do: "#{str}\u001b[0m/#{find_parent("", task.parent)}"
+  defp parent_to_s(str, task, %{type: :directory}), do: "#{str}\u001b[0m::#{find_parent("", task.parent)}"
   defp parent_to_s(str, _, _),                      do: str
 
   defp find_parent(str, ""), do: str
   defp find_parent(str, parent_uuid) do
     parent_task = Chikae.Repository.get(:uuid, parent_uuid)
-    find_parent("#{parent_task.name}/#{str}", parent_task.parent)
+    find_parent("#{parent_task.name}::#{str}", parent_task.parent)
   end
 
   defp name_to_s(str, task, _) do
