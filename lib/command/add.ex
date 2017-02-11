@@ -4,7 +4,7 @@ defmodule Chikae.Command.Add do
 
   defmacro __using__(:parser) do
     quote do
-      def get_requirements(:add, switches, aliases) do
+      def get_requirements(:add) do
         switches = []
                    |> Keyword.put(:parent, :string)
                    |> Keyword.put(:category, :string)
