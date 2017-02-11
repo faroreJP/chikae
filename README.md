@@ -1,6 +1,15 @@
 # About
 The TODO management tool on CLI by Elixir
 
+# Installation
+Chikae requires erlang and elixir.
+
+```
+$ git clone https://github.com/faroreJP/chikae.git
+$ cd chikae
+$ mix escript.build
+```
+
 # Usage
 ## Add Task
 ```
