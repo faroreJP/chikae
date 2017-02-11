@@ -2,6 +2,19 @@ defmodule Chikae.Command.Add do
   alias Chikae.Task
   alias Chikae.Repository
 
+  defmacro __using__(:parser) do
+    quote do
+      def get_requirements(:add, switches, aliases) do
+        switches = []
+                   |> Keyword.put(:parent, :string)
+                   |> Keyword.put(:category, :string)
+                   |> Keyword.put(:limit, :string)
+
+        {:ok, switches, []}
+      end
+    end
+  end
+
   defmacro __using__(:executioner) do
     quote do
       def execute(:add, [name], opts) do
