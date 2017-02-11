@@ -1,2 +1,0 @@
-# Select Task and Return it's UUID
-alias -g TSK='`./chikae list --uuid --no-color | peco --prompt "CHIKAE TASKS>" | sed -e "s/ .*//g"`'

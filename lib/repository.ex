@@ -1,6 +1,6 @@
 defmodule Chikae.Repository do
 
-  defp file_name(), do: "tasks.json"
+  defp file_name(), do: Chikae.Constants.get_persistent_path() <> "tasks.json"
 
   #------------------------------------------------------------------------------------------
   # Get
@@ -36,6 +36,16 @@ defmodule Chikae.Repository do
         Enum.at(tasks, index)
     end
   end
+
+  def get(name) do
+    case get(:name, name) do
+      nil ->
+        get(:uuid, name)
+      task ->
+        task
+    end
+  end
+
 
   #------------------------------------------------------------------------------------------
   # Set
